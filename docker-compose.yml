@@ -1,0 +1,9 @@
+version: '3.3'
+
+services:
+  duration:
+    container_name: duration
+    image: php:7.4-cli
+    volumes:
+      - .:/app:delegated
+    working_dir: /app
