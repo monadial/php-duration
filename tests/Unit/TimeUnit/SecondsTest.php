@@ -14,16 +14,9 @@ use PHPUnit\Framework\TestCase;
 use TMihalicka\Duration\TimeUnit\Seconds;
 use TMihalicka\Duration\TimeUnit\TimeUnit;
 
-/**
- * @v
- */
 class SecondsTest extends TestCase
 {
     private Seconds $unit;
-
-    public function testToDays(): void
-    {
-    }
 
     public function testToSeconds(): void
     {

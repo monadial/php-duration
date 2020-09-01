@@ -6,15 +6,17 @@ namespace TMihalicka\Duration\TimeUnit;
 
 /**
  * Time unit representing one thousandth of a second.
+ *
+ * @psalm-immutable
  */
 final class Milliseconds extends TimeUnit
 {
-    public function __construct()
+    final public function __construct()
     {
         parent::__construct(self::MILLI_SCALE);
     }
 
-    protected static function make(): Milliseconds
+    public static function make(): Milliseconds
     {
         return new static();
     }

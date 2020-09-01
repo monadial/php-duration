@@ -7,10 +7,14 @@
   "autoload": {
     "psr-4": {
       "TMihalicka\\Duration\\": "src"
-    }
+    },
+    "files": [
+      "src/functions.php"
+    ]
   },
   "require": {
-    "php": "^7.4"
+    "php": "^7.4",
+    "lstrojny/functional-php": "1.14.0"
   },
   "require-dev": {
     "slevomat/coding-standard": "~6.0",

@@ -34,6 +34,7 @@
     <exclude name="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing"/>
     <exclude name="SlevomatCodingStandard.Functions.DisallowArrowFunction"/>
     <exclude name="SlevomatCodingStandard.Numbers.DisallowNumericLiteralSeparator.DisallowedNumericLiteralSeparator"/>
+    <exclude name="SlevomatCodingStandard.Namespaces.UseSpacing.IncorrectLinesCountBetweenDifferentTypeOfUse"/>
   </rule>
 
   <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
@@ -57,6 +58,10 @@
         <element key="src" value="TMihalicka\Duration"/>
       </property>
     </properties>
+  </rule>
+
+  <rule ref="SlevomatCodingStandard.PHP.DisallowReference.DisallowedInheritingVariableByReference">
+    <exclude-pattern>/src/FiniteDuration.php</exclude-pattern>
   </rule>
 
 </ruleset>

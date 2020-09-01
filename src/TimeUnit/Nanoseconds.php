@@ -6,6 +6,8 @@ namespace TMihalicka\Duration\TimeUnit;
 
 /**
  * Time unit representing one thousandth of a microsecond.
+ *
+ * @psalm-immutable
  */
 final class Nanoseconds extends TimeUnit
 {
@@ -14,7 +16,7 @@ final class Nanoseconds extends TimeUnit
         parent::__construct(self::NANO_SCALE);
     }
 
-    protected static function make(): Nanoseconds
+    public static function make(): Nanoseconds
     {
         return new static();
     }

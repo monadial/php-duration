@@ -6,15 +6,17 @@ namespace TMihalicka\Duration\TimeUnit;
 
 /**
  * Time unit representing twenty four hours.
+ *
+ * @psalm-immutable
  */
 final class Days extends TimeUnit
 {
-    public function __construct()
+    final public function __construct()
     {
         parent::__construct(self::DAY_SCALE);
     }
 
-    protected static function make(): Days
+    public static function make(): Days
     {
         return new static();
     }

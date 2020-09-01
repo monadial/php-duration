@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace TMihalicka\Duration\TimeUnit;
 
+use TMihalicka\Duration\TimeUnit\Exception\WrongTimeUnit;
+
 /**
  * A {@link TimeUnit} represents time duration at given unit of
  * granularity and provides utility methods to convert across these units.
@@ -16,6 +18,9 @@ namespace TMihalicka\Duration\TimeUnit;
  * hours.
  *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @psalm-immutable
  */
 abstract class TimeUnit
 {
@@ -35,9 +40,9 @@ abstract class TimeUnit
 
     public const DAY_SCALE = 24 * self::HOUR_SCALE; // 24L * 60L
 
-    public const MAX_VALUE = PHP_INT_MAX; // -2^63
+    public const MAX_VALUE = PHP_INT_MAX; // 2^63-1
 
-    public const MIN_VALUE = PHP_INT_MIN; // 2^63-1
+    public const MIN_VALUE = PHP_INT_MIN; //  -2^63
 
     /**
      * @psalm-readonly
@@ -50,9 +55,7 @@ abstract class TimeUnit
     protected int $scale;
 
     /*
-     * Instances cache conversion ratios and saturation cutoffs for
-     * the units up through SECONDS. Other cases compute them, in
-     * method cvt.
+     * Instances cache conversion ratios and saturation cutoffs for the units
      */
 
     /**
@@ -78,6 +81,21 @@ abstract class TimeUnit
     /**
      * @psalm-readonly
      */
+    protected int $maxMinutes;
+
+    /**
+     * @psalm-readonly
+     */
+    protected int $maxHours;
+
+    /**
+     * @psalm-readonly
+     */
+    protected int $maxDays;
+
+    /**
+     * @psalm-readonly
+     */
     protected int $nanoRatio;
 
     /**
@@ -95,7 +113,22 @@ abstract class TimeUnit
      */
     protected int $secondRatio;
 
-    abstract protected static function make(): TimeUnit;
+    /**
+     * @psalm-readonly
+     */
+    protected int $minuteRatio;
+
+    /**
+     * @psalm-readonly
+     */
+    protected int $hourRatio;
+
+    /**
+     * @psalm-readonly
+     */
+    protected int $dayRatio;
+
+    abstract public static function make(): TimeUnit;
 
     protected function __construct(int $scale)
     {
@@ -104,7 +137,7 @@ abstract class TimeUnit
         $this->scale = $scale;
 
         // nano
-        $this->nanoRatio = 1;
+        $this->nanoRatio = self::unitRatio(self::NANO_SCALE, $scale);
         $this->maxNanos = self::maxUnitValue($this->nanoRatio);
 
         // micro
@@ -118,6 +151,40 @@ abstract class TimeUnit
         // seconds
         $this->secondRatio = self::unitRatio(self::SECOND_SCALE, $scale);
         $this->maxSeconds = self::maxUnitValue($this->secondRatio);
+
+        // minutes
+        $this->minuteRatio = self::unitRatio(self::MINUTE_SCALE, $scale);
+        $this->maxMinutes = self::maxUnitValue($this->secondRatio);
+
+        // minutes
+        $this->hourRatio = self::unitRatio(self::HOUR_SCALE, $scale);
+        $this->maxHours = self::maxUnitValue($this->hourRatio);
+
+        // minutes
+        $this->dayRatio = self::unitRatio(self::DAY_SCALE, $scale);
+        $this->maxDays = self::maxUnitValue($this->dayRatio);
+    }
+
+    public function maxValue(): int
+    {
+        switch (true) {
+            case $this instanceof Nanoseconds:
+                return $this->maxNanos;
+            case $this instanceof Microseconds:
+                return $this->maxMicros;
+            case $this instanceof Milliseconds:
+                return $this->maxMillis;
+            case $this instanceof Seconds:
+                return $this->maxSeconds;
+            case $this instanceof Minutes:
+                return $this->maxMinutes;
+            case $this instanceof Hours:
+                return $this->maxHours;
+            case $this instanceof Days:
+                return $this->maxDays;
+            default:
+                throw new WrongTimeUnit($this);
+        }
     }
 
     /**
@@ -128,10 +195,11 @@ abstract class TimeUnit
      *
      * {@see TimeUnit::MAX_VALUE} if conversion would negatively overflow,
      * {@see TimeUnit::MIN_VALUE} if it would positively overflow.
+     * @psalm-pure
      */
     public function toNanos(int $duration): int
     {
-        // this is dirt hack how to resolve proper type conversion from float to string
+        // this is dirt hack how to resolve proper type conversion from float to int
         $fun = function (int $duration): float {
             if ($this->scale === self::NANO_SCALE) {
                 return $duration;
@@ -142,7 +210,7 @@ abstract class TimeUnit
             }
 
             if ($duration < -$this->maxNanos) {
-                return (float) self::MIN_VALUE;
+                return (float)self::MIN_VALUE;
             }
 
             return $duration * $this->nanoRatio;
@@ -162,7 +230,7 @@ abstract class TimeUnit
      */
     public function toMicros(int $duration): int
     {
-        // this is dirt hack how to resolve proper type conversion from float to string
+        // this is dirt hack how to resolve proper type conversion from float to int
         $fun = function (int $duration): float {
             if ($this->scale <= self::MICRO_SCALE) {
                 return $this->scale === self::MICRO_SCALE ? $duration : $duration / $this->microRatio;
@@ -173,7 +241,7 @@ abstract class TimeUnit
             }
 
             if ($duration < -$this->maxMicros) {
-                return (float) self::MIN_VALUE;
+                return (float)self::MIN_VALUE;
             }
 
             return $duration * $this->microRatio;
@@ -193,7 +261,7 @@ abstract class TimeUnit
      */
     public function toMillis(int $duration): int
     {
-        // this is dirt hack how to resolve proper type conversion from float to string
+        // this is dirt hack how to resolve proper type conversion from float to int
         $fun = function (int $duration): float {
             if ($this->scale <= self::MILLI_SCALE) {
                 return $this->scale === self::MILLI_SCALE ? $duration : $duration / $this->milliRatio;
@@ -204,7 +272,7 @@ abstract class TimeUnit
             }
 
             if ($duration < -$this->maxMillis) {
-                return (float) self::MIN_VALUE;
+                return (float)self::MIN_VALUE;
             }
 
             return $duration * $this->milliRatio;
@@ -234,7 +302,7 @@ abstract class TimeUnit
             }
 
             if ($duration < -$this->maxSeconds) {
-                return (float) self::MIN_VALUE;
+                return (float)self::MIN_VALUE;
             }
 
             return $duration * $this->secondRatio;
@@ -254,7 +322,7 @@ abstract class TimeUnit
      */
     public function toMinutes(int $duration): int
     {
-        return $this->cvt($duration, self::MINUTE_SCALE, $this->scale);
+        return self::cvt($duration, self::MINUTE_SCALE, $this->scale);
     }
 
     /**
@@ -268,7 +336,7 @@ abstract class TimeUnit
      */
     public function toHours(int $duration): int
     {
-        return $this->cvt($duration, self::HOUR_SCALE, $this->scale);
+        return self::cvt($duration, self::HOUR_SCALE, $this->scale);
     }
 
     /**
@@ -282,7 +350,7 @@ abstract class TimeUnit
      */
     public function toDays(int $duration): int
     {
-        return $this->cvt($duration, self::DAY_SCALE, $this->scale);
+        return self::cvt($duration, self::DAY_SCALE, $this->scale);
     }
 
     public function convert(int $sourceDuration, TimeUnit $sourceUnit): int
@@ -297,8 +365,13 @@ abstract class TimeUnit
             case $this instanceof Seconds:
                 return $sourceUnit->toSeconds($sourceDuration);
             default:
-                return $this->cvt($sourceDuration, $this->scale, $sourceUnit->scale);
+                return self::cvt($sourceDuration, $this->scale, $sourceUnit->scale);
         }
+    }
+
+    public function equals(TimeUnit $timeUnit): bool
+    {
+        return $this === $timeUnit;
     }
 
     /**
@@ -367,13 +440,34 @@ abstract class TimeUnit
     /**
      * @psalm-pure
      */
-    private function cvt(int $duration, int $destinationUnitScale, int $sourceUnitScale): int
+    private static function maxUnitValue(int $scale): int
     {
-        // this is dirt hack how to resolve proper type conversion from float to string
+        return (int)(self::MAX_VALUE / $scale);
+    }
+
+    /**
+     * @psalm-pure
+     */
+    private static function unitRatio(int $scale, int $unitScale): int
+    {
+        $result = static fn (
+            int $scale,
+            int $unitScale
+        ): float => $scale >= $unitScale ? $scale / $unitScale : $unitScale / $scale;
+
+        return (int)$result($scale, $unitScale);
+    }
+
+    /**
+     * @psalm-pure
+     */
+    private static function cvt(int $duration, int $destinationUnitScale, int $sourceUnitScale): int
+    {
+        // this is dirt hack how to resolve proper type conversion from float to int
         $fun = static function (int $duration, int $destinationUnitScale, int $sourceUnitScale): float {
             // lazy computation
-            $ratioFn = static fn (int $source, int $dest): int => (int) ($source / $dest);
-            $maximumFn = static fn (int $ratio): int => (int) (self::MAX_VALUE / $ratio);
+            $ratioFn = static fn (int $source, int $dest): int => (int)($source / $dest);
+            $maximumFn = static fn (int $ratio): int => (int)(self::MAX_VALUE / $ratio);
 
             if ($sourceUnitScale === $destinationUnitScale) {
                 return $duration;
@@ -391,7 +485,7 @@ abstract class TimeUnit
             }
 
             if ($duration < -$maximum) {
-                return (float) self::MIN_VALUE;
+                return (float)self::MIN_VALUE;
             }
 
             return $duration * $ratio;
@@ -400,24 +494,8 @@ abstract class TimeUnit
         return (int)$fun($duration, $destinationUnitScale, $sourceUnitScale);
     }
 
-    /**
-     * @psalm-pure
-     */
-    private static function maxUnitValue(int $scale): int
+    public function __toString(): string
     {
-        return (int)(self::MAX_VALUE / $scale);
-    }
-
-    /**
-     * @psalm-pure
-     */
-    private static function unitRatio(int $scale, int $unitScale): int
-    {
-        $result = static fn (
-            int $scale,
-            int $unitScale
-        ): float => $scale >= $unitScale ? $scale / $unitScale : $unitScale / $scale;
-
-        return (int)$result($scale, $unitScale);
+        return static::class;
     }
 }

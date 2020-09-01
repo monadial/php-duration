@@ -6,6 +6,8 @@ namespace TMihalicka\Duration\TimeUnit;
 
 /**
  * Time unit representing sixty seconds.
+ *
+ * @psalm-immutable
  */
 final class Minutes extends TimeUnit
 {
@@ -14,7 +16,7 @@ final class Minutes extends TimeUnit
         parent::__construct(self::MINUTE_SCALE);
     }
 
-    protected static function make(): Minutes
+    public static function make(): Minutes
     {
         return new static();
     }
