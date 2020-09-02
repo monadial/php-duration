@@ -378,7 +378,7 @@ abstract class TimeUnit
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    public static function Nanoseconds(): Nanoseconds
+    final public static function Nanoseconds(): Nanoseconds
     {
         return Nanoseconds::make();
     }
@@ -387,7 +387,7 @@ abstract class TimeUnit
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    public static function Microseconds(): Microseconds
+    final public static function Microseconds(): Microseconds
     {
         return Microseconds::make();
     }
@@ -396,7 +396,7 @@ abstract class TimeUnit
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    public static function Milliseconds(): Milliseconds
+    final public static function Milliseconds(): Milliseconds
     {
         return Milliseconds::make();
     }
@@ -405,7 +405,7 @@ abstract class TimeUnit
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    public static function Seconds(): Seconds
+    final public static function Seconds(): Seconds
     {
         return Seconds::make();
     }
@@ -414,7 +414,7 @@ abstract class TimeUnit
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    public static function Minutes(): Minutes
+    final public static function Minutes(): Minutes
     {
         return Minutes::make();
     }
@@ -423,7 +423,7 @@ abstract class TimeUnit
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    public static function Hours(): Hours
+    final public static function Hours(): Hours
     {
         return Hours::make();
     }
@@ -432,7 +432,7 @@ abstract class TimeUnit
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    public static function Days(): Days
+    final public static function Days(): Days
     {
         return Days::make();
     }
