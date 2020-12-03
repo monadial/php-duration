@@ -81,7 +81,7 @@ final class FiniteDuration extends Duration
 
     public function toMillis(): int
     {
-        return $this->unit->toMinutes($this->length);
+        return $this->unit->toMillis($this->length);
     }
 
     public function toSeconds(): int
