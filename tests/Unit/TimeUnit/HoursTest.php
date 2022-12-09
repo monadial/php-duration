@@ -8,11 +8,11 @@ declare(strict_types=1);
  * @license Internal use only
  */
 
-namespace TMihalicka\Duration\Tests\TimeUnit;
+namespace Monadial\Duration\Tests\TimeUnit;
 
-use TMihalicka\Duration\TimeUnit\Hours;
+use Monadial\Duration\TimeUnit\Hours;
 use PHPUnit\Framework\TestCase;
-use TMihalicka\Duration\TimeUnit\TimeUnit;
+use Monadial\Duration\TimeUnit\TimeUnit;
 
 class HoursTest extends TestCase
 {

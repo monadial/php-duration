@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace TMihalicka\Duration\TimeUnit;
+namespace Monadial\Duration\TimeUnit;
 
-use TMihalicka\Duration\TimeUnit\Exception\WrongTimeUnit;
+use Monadial\Duration\TimeUnit\Exception\WrongTimeUnit;
 
 /**
  * A {@link TimeUnit} represents time duration at given unit of
@@ -195,11 +195,9 @@ abstract class TimeUnit
      *
      * {@see TimeUnit::MAX_VALUE} if conversion would negatively overflow,
      * {@see TimeUnit::MIN_VALUE} if it would positively overflow.
-     * @psalm-pure
      */
     public function toNanos(int $duration): int
     {
-        // this is dirt hack how to resolve proper type conversion from float to int
         $fun = function (int $duration): float {
             if ($this->scale === self::NANO_SCALE) {
                 return $duration;
@@ -230,10 +228,9 @@ abstract class TimeUnit
      */
     public function toMicros(int $duration): int
     {
-        // this is dirt hack how to resolve proper type conversion from float to int
         $fun = function (int $duration): float {
             if ($this->scale <= self::MICRO_SCALE) {
-                return $this->scale === self::MICRO_SCALE ? $duration : $duration / $this->microRatio;
+                return $duration / $this->microRatio;
             }
 
             if ($duration > $this->maxMicros) {
@@ -261,10 +258,9 @@ abstract class TimeUnit
      */
     public function toMillis(int $duration): int
     {
-        // this is dirt hack how to resolve proper type conversion from float to int
         $fun = function (int $duration): float {
             if ($this->scale <= self::MILLI_SCALE) {
-                return $this->scale === self::MILLI_SCALE ? $duration : $duration / $this->milliRatio;
+                return $duration / $this->milliRatio;
             }
 
             if ($duration > $this->maxMillis) {
@@ -294,7 +290,7 @@ abstract class TimeUnit
     {
         $fun = function (int $duration): float {
             if ($this->scale <= self::SECOND_SCALE) {
-                return $this->scale === self::MILLI_SCALE ? $duration : $duration / $this->secondRatio;
+                return $duration / $this->secondRatio;
             }
 
             if ($duration > $this->maxSeconds) {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TMihalicka\Duration\TimeUnit;
+namespace Monadial\Duration\TimeUnit;
 
 /**
  * Time unit representing one thousandth of a second.
