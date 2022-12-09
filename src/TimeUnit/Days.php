@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Monadial\Duration\TimeUnit;
 
 /**
- * Time unit representing twenty four hours.
- *
- * @psalm-immutable
+ * Time unit representing twenty-four hours.
  */
 final class Days extends TimeUnit
 {

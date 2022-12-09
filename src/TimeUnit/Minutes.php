@@ -6,8 +6,6 @@ namespace Monadial\Duration\TimeUnit;
 
 /**
  * Time unit representing sixty seconds.
- *
- * @psalm-immutable
  */
 final class Minutes extends TimeUnit
 {

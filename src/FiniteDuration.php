@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 use Monadial\Duration\Exception\FiniteDurationBoundary;
 use Monadial\Duration\Exception\NanosecondsAreNotConvertibleToDateTime;
+use Monadial\Duration\Exception\UnableToConvertToDateTime;
 use Monadial\Duration\TimeUnit\Days;
 use Monadial\Duration\TimeUnit\Exception\WrongTimeUnit;
 use Monadial\Duration\TimeUnit\Hours;
@@ -21,6 +22,7 @@ use Monadial\Duration\TimeUnit\TimeUnit;
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 final class FiniteDuration extends Duration
 {
@@ -138,13 +140,7 @@ final class FiniteDuration extends Duration
             $bAbs = abs($bNum);
 
             // product of multiplication
-            $product = $aAbs * $bAbs;
-
-            if ($aAbs === $aNum ^ $bAbs === $bNum) {
-                return -$product;
-            }
-
-            return $product;
+            return $aAbs * $bAbs;
         };
 
         return new self($safeMul($this->length, $factor), $this->unit);
@@ -169,6 +165,7 @@ final class FiniteDuration extends Duration
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
+    // phpcs:ignore SlevomatCodingStandard.Functions.FunctionLength.FunctionLength
     public function toCoarsest(): Duration
     {
         // reference to this, for static closure binding
@@ -178,12 +175,12 @@ final class FiniteDuration extends Duration
             $coarseOrThis =
                 static function (int $divider, TimeUnit $coarser) use (&$loop, $length, $unit, $self): FiniteDuration {
                     if ($length % $divider === 0) {
-                        /** @var callable(int, TimeUnit): FiniteDuration $typedLoop */
+                        /**
+                         * @var callable(int, TimeUnit): FiniteDuration $typedLoop
+                         */
                         $typedLoop = $loop;
-                        /** @var FiniteDuration $coarseDuration */
-                        $coarseDuration = $typedLoop((int)($length / $divider), $coarser);
 
-                        return $coarseDuration;
+                        return $typedLoop((int)($length / $divider), $coarser);
                     }
 
                     if ($unit->equals($self->unit)) {
@@ -220,6 +217,31 @@ final class FiniteDuration extends Duration
         return $loop($this->length, $this->unit);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
+    public function asDateTime(): DateTimeImmutable
+    {
+        if ($this->unit->equals(Nanoseconds::make())) {
+            throw new NanosecondsAreNotConvertibleToDateTime();
+        }
+
+        $now = new DateTimeImmutable('now');
+
+        $maybeConverted = $now->modify(sprintf('+%s %s', $this->length, $this->timeUnitName()));
+
+        // fallback to the smallest possible unit
+        if ($maybeConverted === false) {
+            throw new UnableToConvertToDateTime($this);
+        }
+
+        return $maybeConverted;
+    }
+
+    /**
+     * @phpcsSuppress
+     */
+    //phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
     private function addOther(int $otherLength, TimeUnit $otherUnit): FiniteDuration
     {
         /**
@@ -241,28 +263,10 @@ final class FiniteDuration extends Duration
 
         $totalLength = $safeAdd(
             $commonUnit->convert($this->length, $this->unit),
-            $commonUnit->convert($otherLength, $otherUnit),
+            $commonUnit->convert($otherLength, $otherUnit)
         );
 
         return new static($totalLength, $commonUnit);
-    }
-
-    public function asDateTime(): DateTimeImmutable
-    {
-        if ($this->unit->equals(Nanoseconds::make())) {
-            throw new NanosecondsAreNotConvertibleToDateTime();
-        }
-
-        $now = new DateTimeImmutable('now');
-
-        $maybeConverted = $now->modify(sprintf('+%s %s', $this->length, $this->timeUnitName()));
-
-        // fallback to the smallest possible unit
-        if ($maybeConverted === false) {
-            return $now->modify(sprintf('+%s microseconds', $this->toMicros()));
-        }
-
-        return $maybeConverted;
     }
 
     private function validateBoundary(int $length, TimeUnit $unit): void

@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace Monadial\Duration\Tests\TimeUnit;
 
-use PHPUnit\Framework\TestCase;
 use Monadial\Duration\TimeUnit\Milliseconds;
 use Monadial\Duration\TimeUnit\TimeUnit;
+use PHPUnit\Framework\TestCase;
 
 class MillisecondsTest extends TestCase
 {

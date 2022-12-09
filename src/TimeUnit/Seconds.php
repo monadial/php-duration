@@ -6,8 +6,6 @@ namespace Monadial\Duration\TimeUnit;
 
 /**
  * Time unit representing one second.
- *
- * @psalm-immutable
  */
 final class Seconds extends TimeUnit
 {

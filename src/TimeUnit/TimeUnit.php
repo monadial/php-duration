@@ -20,7 +20,6 @@ use Monadial\Duration\TimeUnit\Exception\WrongTimeUnit;
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @psalm-immutable
  */
 abstract class TimeUnit
 {
@@ -128,6 +127,69 @@ abstract class TimeUnit
      */
     protected int $dayRatio;
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     */
+    final public static function Nanoseconds(): Nanoseconds
+    {
+        return Nanoseconds::make();
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     */
+    final public static function Microseconds(): Microseconds
+    {
+        return Microseconds::make();
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     */
+    final public static function Milliseconds(): Milliseconds
+    {
+        return Milliseconds::make();
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     */
+    final public static function Seconds(): Seconds
+    {
+        return Seconds::make();
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     */
+    final public static function Minutes(): Minutes
+    {
+        return Minutes::make();
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     */
+    final public static function Hours(): Hours
+    {
+        return Hours::make();
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     */
+    final public static function Days(): Days
+    {
+        return Days::make();
+    }
+
     abstract public static function make(): TimeUnit;
 
     protected function __construct(int $scale)
@@ -196,6 +258,7 @@ abstract class TimeUnit
      * {@see TimeUnit::MAX_VALUE} if conversion would negatively overflow,
      * {@see TimeUnit::MIN_VALUE} if it would positively overflow.
      */
+    // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
     public function toNanos(int $duration): int
     {
         $fun = function (int $duration): float {
@@ -225,7 +288,9 @@ abstract class TimeUnit
      *
      * {@see TimeUnit::MAX_VALUE} if conversion would negatively overflow,
      * {@see TimeUnit::MIN_VALUE} if it would positively overflow.
+     * @phpcsSuppress
      */
+    // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
     public function toMicros(int $duration): int
     {
         $fun = function (int $duration): float {
@@ -256,6 +321,7 @@ abstract class TimeUnit
      * {@see TimeUnit::MAX_VALUE} if conversion would negatively overflow,
      * {@see TimeUnit::MIN_VALUE} if it would positively overflow.
      */
+    // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
     public function toMillis(int $duration): int
     {
         $fun = function (int $duration): float {
@@ -286,6 +352,7 @@ abstract class TimeUnit
      * {@see TimeUnit::MAX_VALUE} if conversion would negatively overflow,
      * {@see TimeUnit::MIN_VALUE} if it would positively overflow.
      */
+    // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
     public function toSeconds(int $duration): int
     {
         $fun = function (int $duration): float {
@@ -371,69 +438,6 @@ abstract class TimeUnit
     }
 
     /**
-     * @SuppressWarnings(PHPMD.StaticAccess)
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     */
-    final public static function Nanoseconds(): Nanoseconds
-    {
-        return Nanoseconds::make();
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.StaticAccess)
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     */
-    final public static function Microseconds(): Microseconds
-    {
-        return Microseconds::make();
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.StaticAccess)
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     */
-    final public static function Milliseconds(): Milliseconds
-    {
-        return Milliseconds::make();
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.StaticAccess)
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     */
-    final public static function Seconds(): Seconds
-    {
-        return Seconds::make();
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.StaticAccess)
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     */
-    final public static function Minutes(): Minutes
-    {
-        return Minutes::make();
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.StaticAccess)
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     */
-    final public static function Hours(): Hours
-    {
-        return Hours::make();
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.StaticAccess)
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     */
-    final public static function Days(): Days
-    {
-        return Days::make();
-    }
-
-    /**
      * @psalm-pure
      */
     private static function maxUnitValue(int $scale): int
@@ -457,6 +461,7 @@ abstract class TimeUnit
     /**
      * @psalm-pure
      */
+    // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
     private static function cvt(int $duration, int $destinationUnitScale, int $sourceUnitScale): int
     {
         // this is dirt hack how to resolve proper type conversion from float to int

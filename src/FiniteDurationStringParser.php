@@ -50,11 +50,14 @@ final class FiniteDurationStringParser
 
         if (!array_key_exists($unit, self::timeUnit())) {
             throw new InvalidArgumentException(
-                sprintf('Unable to parse given string %s, probably invalid unit!.', $duration),
+                sprintf('Unable to parse given string %s, probably invalid unit!.', $duration)
             );
         }
 
-        /** @psalm-var class-string<TimeUnit> $unitClass */
+        /**
+         * @var class-string<TimeUnit> $unitClass
+         * @psalm-suppress UnnecessaryVarAnnotation
+         */
         $unitClass = self::timeUnit()[$unit];
 
         return FiniteDuration::fromTimeUnit((int)$length, $unitClass::make());
@@ -74,7 +77,7 @@ final class FiniteDurationStringParser
                 $last = last(self::words($word));
 
                 return $last;
-            },
+            }
         );
 
         return $timeUnitNames;
@@ -102,8 +105,8 @@ final class FiniteDurationStringParser
             [head($labels)],
             flat_map(
                 tail($labels),
-                static fn (string $label): array => [$label, $label . 's'],
-            ),
+                static fn (string $label): array => [$label, $label . 's']
+            )
         );
 
         return $result;
@@ -119,8 +122,8 @@ final class FiniteDurationStringParser
             self::TIME_UNIT_LABELS,
             static fn (string $names, string $unit) => map(
                 self::expandLabels(self::words($names)),
-                static fn (string $name) => [$name => $unit],
-            ),
+                static fn (string $name) => [$name => $unit]
+            )
         );
 
         return array_merge(...$result);

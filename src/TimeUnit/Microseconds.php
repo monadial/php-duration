@@ -6,8 +6,6 @@ namespace Monadial\Duration\TimeUnit;
 
 /**
  * Time unit representing one thousandth of a millisecond.
- *
- * @psalm-immutable
  */
 final class Microseconds extends TimeUnit
 {
