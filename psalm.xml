@@ -1,55 +1,66 @@
 <?xml version="1.0"?>
 <psalm
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="https://getpsalm.org/schema/config"
-    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
-    totallyTyped="true"
-    rememberPropertyAssignmentsAfterCall="false"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="https://getpsalm.org/schema/config"
+  name="Psalm for Duration"
+  useDocblockTypes="true"
+  errorLevel="1"
+  reportMixedIssues="true"
+  strictBinaryOperands="false"
+  rememberPropertyAssignmentsAfterCall="true"
+  checkForThrowsDocblock="false"
+  throwExceptionOnError="0"
+  findUnusedCode="true"
+  phpVersion="7.4"
+  xsi:schemaLocation="https://getpsalm.org/schema/config config.xsd"
 >
-    <projectFiles>
-        <directory name="src"/>
-        <directory name="tests"/>
-        <directory name="bin"/>
-        <ignoreFiles>
-            <directory name="vendor"/>
-            <directory name="tests"/>
-        </ignoreFiles>
-    </projectFiles>
+  <projectFiles>
+    <directory name="src"/>
+    <directory name="tests"/>
+    <ignoreFiles>
+      <directory name="vendor"/>
+      <directory name="tests"/>
+    </ignoreFiles>
+  </projectFiles>
 
-    <issueHandlers>
-        <UndefinedClass errorLevel="suppress"/>
+  <issueHandlers>
+    <UndefinedClass errorLevel="suppress"/>
 
-        <LessSpecificReturnType errorLevel="error"/>
+    <LessSpecificReturnType errorLevel="error"/>
 
-        <DeprecatedMethod errorLevel="error"/>
-        <DeprecatedProperty errorLevel="error"/>
-        <DeprecatedClass errorLevel="error"/>
-        <DeprecatedConstant errorLevel="error"/>
-        <DeprecatedInterface errorLevel="error"/>
-        <DeprecatedTrait errorLevel="error"/>
+    <DeprecatedMethod errorLevel="error"/>
+    <DeprecatedProperty errorLevel="error"/>
+    <DeprecatedClass errorLevel="error"/>
+    <DeprecatedConstant errorLevel="error"/>
+    <DeprecatedInterface errorLevel="error"/>
+    <DeprecatedTrait errorLevel="error"/>
 
-        <ForbiddenCode errorLevel="suppress"/>
+    <ForbiddenCode errorLevel="suppress"/>
 
-        <InternalMethod errorLevel="suppress"/>
-        <InternalProperty errorLevel="error"/>
-        <InternalClass errorLevel="error"/>
+    <InternalMethod errorLevel="suppress"/>
+    <InternalProperty errorLevel="error"/>
+    <InternalClass errorLevel="error"/>
 
-        <MissingClosureReturnType errorLevel="error"/>
-        <MissingReturnType errorLevel="error"/>
-        <MissingPropertyType errorLevel="error"/>
-        <InvalidDocblock errorLevel="error"/>
-        <MisplacedRequiredParam errorLevel="error"/>
+    <MissingClosureReturnType errorLevel="error"/>
+    <MissingReturnType errorLevel="error"/>
+    <MissingPropertyType errorLevel="error"/>
+    <InvalidDocblock errorLevel="error"/>
 
-        <PropertyNotSetInConstructor errorLevel="suppress"/>
-        <MissingConstructor errorLevel="error"/>
-        <MissingClosureParamType errorLevel="error"/>
-        <MissingParamType errorLevel="error"/>
-        <RedundantCondition errorLevel="error"/>
-        <DocblockTypeContradiction errorLevel="error"/>
-        <RedundantConditionGivenDocblockType errorLevel="error"/>
-        <RawObjectIteration errorLevel="error"/>
-        <InvalidStringClass errorLevel="error"/>
+    <PropertyNotSetInConstructor errorLevel="suppress"/>
+    <MissingConstructor errorLevel="error"/>
+    <MissingClosureParamType errorLevel="error"/>
+    <MissingParamType errorLevel="error"/>
+    <RedundantCondition errorLevel="error"/>
+    <DocblockTypeContradiction errorLevel="error"/>
+    <RedundantConditionGivenDocblockType errorLevel="error"/>
+    <RawObjectIteration errorLevel="error"/>
+    <InvalidStringClass errorLevel="error"/>
 
-        <UnresolvableInclude errorLevel="suppress"/>
-    </issueHandlers>
+    <UnresolvableInclude errorLevel="suppress"/>
+
+    <UnusedClass errorLevel="suppress"/>
+    <PossiblyUnusedMethod errorLevel="suppress"/>
+    <PossiblyUnusedReturnValue errorLevel="suppress"/>
+    <UnusedProperty errorLevel="suppress"/>
+  </issueHandlers>
 </psalm>

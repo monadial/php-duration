@@ -6,16 +6,16 @@
 
 declare(strict_types=1);
 
-use TMihalicka\Duration\Deadline;
-use TMihalicka\Duration\FiniteDuration;
-use TMihalicka\Duration\TimeUnit\Days;
-use TMihalicka\Duration\TimeUnit\Hours;
-use TMihalicka\Duration\TimeUnit\Microseconds;
-use TMihalicka\Duration\TimeUnit\Milliseconds;
-use TMihalicka\Duration\TimeUnit\Minutes;
-use TMihalicka\Duration\TimeUnit\Nanoseconds;
-use TMihalicka\Duration\TimeUnit\Seconds;
-use TMihalicka\Duration\TimeUnit\TimeUnit;
+use Monadial\Duration\Deadline;
+use Monadial\Duration\FiniteDuration;
+use Monadial\Duration\TimeUnit\Days;
+use Monadial\Duration\TimeUnit\Hours;
+use Monadial\Duration\TimeUnit\Microseconds;
+use Monadial\Duration\TimeUnit\Milliseconds;
+use Monadial\Duration\TimeUnit\Minutes;
+use Monadial\Duration\TimeUnit\Nanoseconds;
+use Monadial\Duration\TimeUnit\Seconds;
+use Monadial\Duration\TimeUnit\TimeUnit;
 
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)

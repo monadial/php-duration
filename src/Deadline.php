@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace TMihalicka\Duration;
+namespace Monadial\Duration;
 
-use TMihalicka\Duration\TimeUnit\TimeUnit;
+use Monadial\Duration\TimeUnit\TimeUnit;
 
 final class Deadline
 {

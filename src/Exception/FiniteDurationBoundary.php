@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TMihalicka\Duration\Exception;
+namespace Monadial\Duration\Exception;
 
 use RuntimeException;
 

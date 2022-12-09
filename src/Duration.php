@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace TMihalicka\Duration;
+namespace Monadial\Duration;
 
-use TMihalicka\Duration\TimeUnit\TimeUnit;
+use Monadial\Duration\TimeUnit\TimeUnit;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -112,11 +112,11 @@ abstract class Duration
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private function timeUnitName(): string
+    public function timeUnitName(): string
     {
-        $timeUnitsNAmes = FiniteDurationStringParser::timeUnitName();
+        $timeUnitsNames = FiniteDurationStringParser::timeUnitName();
 
-        return $timeUnitsNAmes[get_class($this->unit)] . ($this->length === 1 ? "" : "s");
+        return $timeUnitsNames[get_class($this->unit)] . ($this->length === 1 ? "" : "s");
     }
 
     public function __toString(): string
