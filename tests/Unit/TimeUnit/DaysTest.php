@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace Monadial\Duration\Tests\TimeUnit;
 
 use Monadial\Duration\TimeUnit\Days;
-use PHPUnit\Framework\TestCase;
 use Monadial\Duration\TimeUnit\TimeUnit;
+use PHPUnit\Framework\TestCase;
 
 class DaysTest extends TestCase
 {

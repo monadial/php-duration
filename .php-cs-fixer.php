@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-$config = PhpCsFixer\Config::create()
+$config = (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
         'array_syntax'      => [
@@ -15,7 +15,7 @@ $config = PhpCsFixer\Config::create()
     ->setFinder(
         PhpCsFixer\Finder::create()
             ->exclude('vendor')
-            ->exclude('config')
+            ->exclude('tests')
             ->in(__DIR__)
     );
 

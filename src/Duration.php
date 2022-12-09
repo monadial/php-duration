@@ -12,7 +12,6 @@ use Monadial\Duration\TimeUnit\TimeUnit;
 abstract class Duration
 {
     protected int $length;
-
     protected TimeUnit $unit;
 
     /**
@@ -105,8 +104,8 @@ abstract class Duration
 
     public function __construct(int $length, TimeUnit $unit)
     {
-        $this->length = $length;
         $this->unit = $unit;
+        $this->length = $length;
     }
 
     /**

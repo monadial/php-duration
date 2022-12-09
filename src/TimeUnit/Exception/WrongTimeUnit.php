@@ -12,6 +12,6 @@ final class WrongTimeUnit extends RuntimeException
 
     public function __construct(object $unit)
     {
-        parent::__construct(sprintf(self::MESSAGE, get_class($unit)));
+        parent::__construct(sprintf(self::MESSAGE, $unit::class));
     }
 }

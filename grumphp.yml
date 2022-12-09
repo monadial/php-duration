@@ -1,5 +1,4 @@
 grumphp:
-  hooks_dir: bin/grumphp_hooks
   stop_on_failure: true
   process_timeout: 600
   ignore_unstaged_changes: true
@@ -17,7 +16,6 @@ grumphp:
     phpcsfixer2:
       cache_file: '.php_cs.cache'
       allow_risky: true
-      config: '.php_cs'
       using_cache: true
       config_contains_finder: true
       verbose: false
