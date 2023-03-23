@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dce7d4effbf592c32407a959c4c1b935",
+    "content-hash": "df89962c0cbdb5302579dc7e734f5f56",
     "packages": [
         {
             "name": "lstrojny/functional-php",
@@ -7710,7 +7710,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.1"
+        "php": "^7.4"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
