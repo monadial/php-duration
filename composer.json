@@ -13,8 +13,7 @@
     ]
   },
   "require": {
-    "php": "^7.4|~8",
-    "lstrojny/functional-php": "dev-main"
+    "php": "8.*"
   },
   "require-dev": {
     "slevomat/coding-standard": "~8.0",
@@ -53,11 +52,5 @@
       "dealerdirect/phpcodesniffer-composer-installer": true,
       "phpro/grumphp": true
     }
-  },
-  "repositories": [
-    {
-      "type": "github",
-      "url": "https://github.com/monadial/functional-php"
-    }
-  ]
+  }
 }

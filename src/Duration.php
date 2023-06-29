@@ -72,7 +72,7 @@ abstract class Duration
     /**
      * Return the number of nanoseconds as floating point number, scaled down to the given unit.
      */
-    abstract public function toUnit(TimeUnit $unit): float;
+    abstract public function toUnit(TimeUnit $unit): FiniteDuration;
 
     /**
      * Factorise this duration.
@@ -113,7 +113,7 @@ abstract class Duration
      */
     public function timeUnitName(): string
     {
-        $timeUnitsNames = FiniteDurationStringParser::timeUnitName();
+        $timeUnitsNames = FiniteDurationStringParser::timeUnit();
 
         return $timeUnitsNames[get_class($this->unit)] . ($this->length === 1 ? "" : "s");
     }

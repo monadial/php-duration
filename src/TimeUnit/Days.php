@@ -16,6 +16,6 @@ final class Days extends TimeUnit
 
     public static function make(): Days
     {
-        return new static();
+        return new Days();
     }
 }

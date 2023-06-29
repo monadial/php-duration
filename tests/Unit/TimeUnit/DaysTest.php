@@ -16,42 +16,62 @@ use PHPUnit\Framework\TestCase;
 
 class DaysTest extends TestCase
 {
-    private Days $unit;
+    private Days $days;
 
-    protected function setUp(): void
+    public function testToNanos(): void
     {
-        $this->unit = TimeUnit::Days();
-    }
-
-    public function testToDays(): void
-    {
-    }
-
-    public function testConvert(): void
-    {
-    }
-
-    public function testToSeconds(): void
-    {
+        self::assertEquals(24 * 60 * 60 * 1000 * 1000 * 1000, $this->days->toNanos(1));
     }
 
     public function testToMicros(): void
     {
-    }
-
-    public function testToMinutes(): void
-    {
-    }
-
-    public function testToHours(): void
-    {
+        self::assertEquals(24 * 60 * 60 * 1000 * 1000, $this->days->toMicros(1));
     }
 
     public function testToMillis(): void
     {
+        self::assertEquals(24 * 60 * 60 * 1000, $this->days->toMillis(1));
     }
 
-    public function testToNanos(): void
+    public function testToSeconds(): void
     {
+        self::assertEquals(24 * 60 * 60, $this->days->toSeconds(1));
+    }
+
+    public function testToMinutes(): void
+    {
+        self::assertEquals(24 * 60, $this->days->toMinutes(1));
+    }
+
+    public function testToHours(): void
+    {
+        self::assertEquals(24, $this->days->toHours(1));
+    }
+
+    public function testToDays(): void
+    {
+        self::assertEquals(1, $this->days->toDays(1));
+    }
+
+    public function testConversion(): void
+    {
+        self::assertEquals(1, $this->days->convert(1, TimeUnit::Days()));
+        self::assertEquals(1, $this->days->convert(24, TimeUnit::Hours()));
+        self::assertEquals(1, $this->days->convert(24 * 60, TimeUnit::Minutes()));
+        self::assertEquals(1, $this->days->convert(24 * 60 * 60, TimeUnit::Seconds()));
+        self::assertEquals(1, $this->days->convert(24 * 60 * 60 * 1000, TimeUnit::Milliseconds()));
+        self::assertEquals(1, $this->days->convert(24 * 60 * 60 * 1000 * 1000, TimeUnit::Microseconds()));
+        self::assertEquals(1, $this->days->convert(24 * 60 * 60 * 1000 * 1000 * 1000, TimeUnit::Nanoseconds()));
+    }
+
+    public function testEquals(): void
+    {
+        self::assertTrue($this->days->equals(TimeUnit::Days()));
+        self::assertFalse($this->days->equals(TimeUnit::Minutes()));
+    }
+
+    protected function setUp(): void
+    {
+        $this->days = TimeUnit::Days();
     }
 }

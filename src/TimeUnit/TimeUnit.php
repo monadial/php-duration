@@ -14,7 +14,7 @@ use Monadial\Duration\TimeUnit\Exception\WrongTimeUnit;
  * across various contexts. A nanosecond is defined as one
  * thousandth of a microsecond, a microsecond as one thousandth of a
  * millisecond, a millisecond as one thousandth of a second, a minute
- * as sixty seconds, an hour as sixty minutes, and a day as twenty four
+ * as sixty seconds, an hour as sixty minutes, and a day as twenty-four
  * hours.
  *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -419,7 +419,7 @@ abstract class TimeUnit
     public function convert(int $sourceDuration, TimeUnit $sourceUnit): int
     {
         switch (true) {
-            case $sourceUnit instanceof Nanoseconds:
+            case $this instanceof Nanoseconds:
                 return $sourceUnit->toNanos($sourceDuration);
             case $this instanceof Microseconds:
                 return $sourceUnit->toMicros($sourceDuration);
@@ -434,7 +434,7 @@ abstract class TimeUnit
 
     public function equals(TimeUnit $timeUnit): bool
     {
-        return $this === $timeUnit;
+        return $this->scale === $timeUnit->scale;
     }
 
     /**

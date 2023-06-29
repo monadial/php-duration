@@ -16,6 +16,6 @@ final class Nanoseconds extends TimeUnit
 
     public static function make(): Nanoseconds
     {
-        return new static();
+        return new Nanoseconds();
     }
 }

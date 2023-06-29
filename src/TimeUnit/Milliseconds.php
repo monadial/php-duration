@@ -16,6 +16,6 @@ final class Milliseconds extends TimeUnit
 
     public static function make(): Milliseconds
     {
-        return new static();
+        return new Milliseconds();
     }
 }

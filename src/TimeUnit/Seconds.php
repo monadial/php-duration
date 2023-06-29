@@ -16,6 +16,6 @@ final class Seconds extends TimeUnit
 
     public static function make(): Seconds
     {
-        return new static();
+        return new Seconds();
     }
 }

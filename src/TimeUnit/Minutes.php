@@ -16,6 +16,6 @@ final class Minutes extends TimeUnit
 
     public static function make(): Minutes
     {
-        return new static();
+        return new Minutes();
     }
 }

@@ -16,6 +16,6 @@ final class Hours extends TimeUnit
 
     public static function make(): Hours
     {
-        return new static();
+        return new Hours();
     }
 }
