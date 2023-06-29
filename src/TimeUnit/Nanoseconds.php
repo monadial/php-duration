@@ -14,8 +14,8 @@ final class Nanoseconds extends TimeUnit
         parent::__construct(self::NANO_SCALE);
     }
 
-    public static function make(): Nanoseconds
+    public static function make(): self
     {
-        return new Nanoseconds();
+        return new self();
     }
 }

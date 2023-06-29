@@ -48,6 +48,30 @@ final class FiniteDurationTest extends TestCase
         self::assertTrue($finiteDuration->equals($duration));
     }
 
+    public function fromStringData(): array
+    {
+        return [
+            ['1 day', FiniteDuration::fromTimeUnit(1, Days::make())],
+            ['1 hour', FiniteDuration::fromTimeUnit(1, Hours::make())],
+            ['1 minute', FiniteDuration::fromTimeUnit(1, Minutes::make())],
+            ['1 second', FiniteDuration::fromTimeUnit(1, Seconds::make())],
+            ['1 millisecond', FiniteDuration::fromTimeUnit(1, Milliseconds::make())],
+            ['1 microsecond', FiniteDuration::fromTimeUnit(1, Microseconds::make())],
+            ['1 nanosecond', FiniteDuration::fromTimeUnit(1, Nanoseconds::make())],
+            ['31 d', FiniteDuration::fromTimeUnit(31, Days::make())],
+            ['24 h', FiniteDuration::fromTimeUnit(24, Hours::make())],
+            ['60 min', FiniteDuration::fromTimeUnit(60, Minutes::make())],
+            ['60 s', FiniteDuration::fromTimeUnit(60, Seconds::make())],
+            ['1000 ms', FiniteDuration::fromTimeUnit(1000, Milliseconds::make())],
+            ['1000 µs', FiniteDuration::fromTimeUnit(1000, Microseconds::make())],
+            ['1000 ns', FiniteDuration::fromTimeUnit(1000, Nanoseconds::make())],
+            ['30 sec', FiniteDuration::fromTimeUnit(30, Seconds::make())],
+            ['100 millis', FiniteDuration::fromTimeUnit(100, Milliseconds::make())],
+            ['200 micros', FiniteDuration::fromTimeUnit(200, Microseconds::make())],
+            ['300 nanos', FiniteDuration::fromTimeUnit(300, Nanoseconds::make())],
+        ];
+    }
+
     public function testConversion(): void
     {
         $day = FiniteDuration::fromString('1 day');
@@ -104,7 +128,15 @@ final class FiniteDurationTest extends TestCase
         self::assertTrue($hours->unary()->equals(FiniteDuration::fromTimeUnit(-48, TimeUnit::Hours())));
     }
 
-    public function fromStringData(): array
+    /**
+     * @dataProvider toStringData
+     */
+    public function testToString(string $duration, FiniteDuration $finiteDuration): void
+    {
+        self::assertEquals($duration, (string) $finiteDuration);
+    }
+
+    public function toStringData(): array
     {
         return [
             ['1 day', FiniteDuration::fromTimeUnit(1, Days::make())],
@@ -114,17 +146,13 @@ final class FiniteDurationTest extends TestCase
             ['1 millisecond', FiniteDuration::fromTimeUnit(1, Milliseconds::make())],
             ['1 microsecond', FiniteDuration::fromTimeUnit(1, Microseconds::make())],
             ['1 nanosecond', FiniteDuration::fromTimeUnit(1, Nanoseconds::make())],
-            ['31 d', FiniteDuration::fromTimeUnit(31, Days::make())],
-            ['24 h', FiniteDuration::fromTimeUnit(24, Hours::make())],
-            ['60 min', FiniteDuration::fromTimeUnit(60, Minutes::make())],
-            ['60 s', FiniteDuration::fromTimeUnit(60, Seconds::make())],
-            ['1000 ms', FiniteDuration::fromTimeUnit(1000, Milliseconds::make())],
-            ['1000 µs', FiniteDuration::fromTimeUnit(1000, Microseconds::make())],
-            ['1000 ns', FiniteDuration::fromTimeUnit(1000, Nanoseconds::make())],
-            ['30 sec', FiniteDuration::fromTimeUnit(30, Seconds::make())],
-            ['100 millis', FiniteDuration::fromTimeUnit(100, Milliseconds::make())],
-            ['200 micros', FiniteDuration::fromTimeUnit(200, Microseconds::make())],
-            ['300 nanos', FiniteDuration::fromTimeUnit(300, Nanoseconds::make())],
+            ['2 days', FiniteDuration::fromTimeUnit(2, Days::make())],
+            ['2 hours', FiniteDuration::fromTimeUnit(2, Hours::make())],
+            ['2 minutes', FiniteDuration::fromTimeUnit(2, Minutes::make())],
+            ['2 seconds', FiniteDuration::fromTimeUnit(2, Seconds::make())],
+            ['2 milliseconds', FiniteDuration::fromTimeUnit(2, Milliseconds::make())],
+            ['2 microseconds', FiniteDuration::fromTimeUnit(2, Microseconds::make())],
+            ['2 nanoseconds', FiniteDuration::fromTimeUnit(2, Nanoseconds::make())],
         ];
     }
 }

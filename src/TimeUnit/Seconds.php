@@ -14,8 +14,8 @@ final class Seconds extends TimeUnit
         parent::__construct(self::SECOND_SCALE);
     }
 
-    public static function make(): Seconds
+    public static function make(): self
     {
-        return new Seconds();
+        return new self();
     }
 }

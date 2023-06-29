@@ -33,15 +33,15 @@ final class FiniteDuration extends Duration
         parent::__construct($length, $unit);
     }
 
-    public static function fromTimeUnit(int $length, TimeUnit $unit): FiniteDuration
+    public static function fromTimeUnit(int $length, TimeUnit $unit): self
     {
-        return new FiniteDuration($length, $unit);
+        return new self($length, $unit);
     }
 
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public static function fromNanos(int $nanos): FiniteDuration
+    public static function fromNanos(int $nanos): self
     {
         if ($nanos > (TimeUnit::MAX_VALUE - 1) || $nanos < TimeUnit::MIN_VALUE + 1) {
             throw new InvalidArgumentException(sprintf("trying to construct too large duration with %s ns", $nanos));
@@ -49,26 +49,26 @@ final class FiniteDuration extends Duration
 
         switch (true) {
             case $nanos % TimeUnit::DAY_SCALE === 0:
-                return new FiniteDuration((int)($nanos / TimeUnit::DAY_SCALE), TimeUnit::Days());
+                return new self((int)($nanos / TimeUnit::DAY_SCALE), TimeUnit::Days());
             case $nanos % TimeUnit::HOUR_SCALE === 0:
-                return new FiniteDuration((int)($nanos / TimeUnit::HOUR_SCALE), TimeUnit::Hours());
+                return new self((int)($nanos / TimeUnit::HOUR_SCALE), TimeUnit::Hours());
             case $nanos % TimeUnit::MINUTE_SCALE === 0:
-                return new FiniteDuration((int)($nanos / TimeUnit::MINUTE_SCALE), TimeUnit::Minutes());
+                return new self((int)($nanos / TimeUnit::MINUTE_SCALE), TimeUnit::Minutes());
             case $nanos % TimeUnit::SECOND_SCALE === 0:
-                return new FiniteDuration((int)($nanos / TimeUnit::SECOND_SCALE), TimeUnit::Seconds());
+                return new self((int)($nanos / TimeUnit::SECOND_SCALE), TimeUnit::Seconds());
             case $nanos % TimeUnit::MILLI_SCALE === 0:
-                return new FiniteDuration((int)($nanos / TimeUnit::MILLI_SCALE), TimeUnit::Milliseconds());
+                return new self((int)($nanos / TimeUnit::MILLI_SCALE), TimeUnit::Milliseconds());
             case $nanos % TimeUnit::MICRO_SCALE === 0:
-                return new FiniteDuration((int)($nanos / TimeUnit::MICRO_SCALE), TimeUnit::Microseconds());
+                return new self((int)($nanos / TimeUnit::MICRO_SCALE), TimeUnit::Microseconds());
             default:
-                return new FiniteDuration($nanos, TimeUnit::Nanoseconds());
+                return new self($nanos, TimeUnit::Nanoseconds());
         }
     }
 
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public static function fromString(string $duration): FiniteDuration
+    public static function fromString(string $duration): self
     {
         return FiniteDurationStringParser::parse($duration);
     }
@@ -108,32 +108,32 @@ final class FiniteDuration extends Duration
         return $this->unit->toDays($this->length);
     }
 
-    public function add(Duration $other): FiniteDuration
+    public function add(Duration $other): self
     {
         return $this->addOther($other->length, $other->unit);
     }
 
-    public function subtract(Duration $other): FiniteDuration
+    public function subtract(Duration $other): self
     {
         return $this->addOther(-$other->length, $other->unit);
     }
 
-    public function multiply(int $factor): FiniteDuration
+    public function multiply(int $factor): self
     {
         return self::fromNanos($this->toNanos() * $factor);
     }
 
-    public function division(int $divisor): FiniteDuration
+    public function division(int $divisor): self
     {
         return self::fromNanos((int)($this->toNanos() / $divisor));
     }
 
-    public function toUnit(TimeUnit $unit): FiniteDuration
+    public function toUnit(TimeUnit $unit): self
     {
         return self::fromNanos($unit->convert($this->toNanos(), $unit));
     }
 
-    public function factor(int $factor): FiniteDuration
+    public function factor(int $factor): self
     {
         $safeMul = static function (int $aNum, int $bNum): int {
             $aAbs = abs($aNum);
@@ -143,12 +143,12 @@ final class FiniteDuration extends Duration
             return $aAbs * $bAbs;
         };
 
-        return new FiniteDuration($safeMul($this->length, $factor), $this->unit);
+        return new self($safeMul($this->length, $factor), $this->unit);
     }
 
     public function unary(): Duration
     {
-        return new FiniteDuration(-$this->length, $this->unit);
+        return new self(-$this->length, $this->unit);
     }
 
     public function isFinite(): bool
@@ -171,8 +171,16 @@ final class FiniteDuration extends Duration
         // reference to this, for static closure binding
         $self = $this;
 
-        $loop = static function (int $length, TimeUnit $unit) use (&$loop, $self): FiniteDuration {
-            $coarseOrThis = static function (int $divider, TimeUnit $coarser) use (&$loop, $length, $unit, $self): FiniteDuration {
+        $loop = static function (int $length, TimeUnit $unit) use (&$loop, $self): self {
+            $coarseOrThis = static function (
+                int $divider,
+                TimeUnit $coarser
+            ) use (
+                &$loop,
+                $length,
+                $unit,
+                $self
+            ): self {
                 if ($length % $divider === 0) {
                     /**
                      * @var callable(int, TimeUnit): FiniteDuration $typedLoop
@@ -186,12 +194,12 @@ final class FiniteDuration extends Duration
                     return $self;
                 }
 
-                return new FiniteDuration($length, $unit);
+                return new self($length, $unit);
             };
 
             switch (true) {
                 case $unit instanceof Days:
-                    return new FiniteDuration($length, $unit);
+                    return new self($length, $unit);
                 case $unit instanceof Hours:
                     return $coarseOrThis(24, TimeUnit::Days());
                 case $unit instanceof Minutes:
@@ -241,7 +249,7 @@ final class FiniteDuration extends Duration
      * @phpcsSuppress
      */
     //phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
-    private function addOther(int $otherLength, TimeUnit $otherUnit): FiniteDuration
+    private function addOther(int $otherLength, TimeUnit $otherUnit): self
     {
         /**
          * @psalm-pure
@@ -260,9 +268,12 @@ final class FiniteDuration extends Duration
 
         $commonUnit = $otherUnit->convert(1, $this->unit) === 0 ? $this->unit : $otherUnit;
 
-        $totalLength = $safeAdd($commonUnit->convert($this->length, $this->unit), $commonUnit->convert($otherLength, $otherUnit));
+        $totalLength = $safeAdd(
+            $commonUnit->convert($this->length, $this->unit),
+            $commonUnit->convert($otherLength, $otherUnit)
+        );
 
-        return new FiniteDuration($totalLength, $commonUnit);
+        return new self($totalLength, $commonUnit);
     }
 
     private function validateBoundary(int $length, TimeUnit $unit): void

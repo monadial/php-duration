@@ -70,6 +70,7 @@ class MillisecondsTest extends TestCase
         self::assertFalse($this->milliseconds->equals(TimeUnit::Minutes()));
     }
 
+
     protected function setUp(): void
     {
         $this->milliseconds = TimeUnit::Milliseconds();

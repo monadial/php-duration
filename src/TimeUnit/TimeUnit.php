@@ -190,7 +190,7 @@ abstract class TimeUnit
         return Days::make();
     }
 
-    abstract public static function make(): TimeUnit;
+    abstract public static function make(): self;
 
     protected function __construct(int $scale)
     {
@@ -416,7 +416,7 @@ abstract class TimeUnit
         return self::cvt($duration, self::DAY_SCALE, $this->scale);
     }
 
-    public function convert(int $sourceDuration, TimeUnit $sourceUnit): int
+    public function convert(int $sourceDuration, self $sourceUnit): int
     {
         switch (true) {
             case $this instanceof Nanoseconds:
@@ -432,7 +432,7 @@ abstract class TimeUnit
         }
     }
 
-    public function equals(TimeUnit $timeUnit): bool
+    public function equals(self $timeUnit): bool
     {
         return $this->scale === $timeUnit->scale;
     }

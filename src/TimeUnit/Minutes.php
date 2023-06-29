@@ -14,8 +14,8 @@ final class Minutes extends TimeUnit
         parent::__construct(self::MINUTE_SCALE);
     }
 
-    public static function make(): Minutes
+    public static function make(): self
     {
-        return new Minutes();
+        return new self();
     }
 }

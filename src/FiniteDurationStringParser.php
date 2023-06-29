@@ -16,18 +16,21 @@ use Monadial\Duration\TimeUnit\TimeUnit;
 
 final class FiniteDurationStringParser
 {
-    private const DURATION_FORMAT = '/^\d+ [\wµ+]/';
-
-    private const TIME_UNIT_LABELS = [
-        Days::class => 'd day days',
-        Hours::class => 'h hour hours',
-        Minutes::class => 'min minute minutes',
-        Seconds::class => 's sec second seconds',
-        Milliseconds::class => 'ms millis millisecond milliseconds',
-        Microseconds::class => 'us µs micro micros microsecond microseconds',
-        Nanoseconds::class => 'ns nano nanos nanosecond nanoseconds',
+    public const TIME_UNIT_LABELS = [
+        Days::class => 'day d days',
+        Hours::class => 'hour h hours',
+        Microseconds::class => 'microsecond us µs micro micros microseconds',
+        Milliseconds::class => 'millisecond ms millis milliseconds',
+        Minutes::class => 'minute min minutes',
+        Nanoseconds::class => 'nanosecond ns nano nanos nanoseconds',
+        Seconds::class => 'second s sec seconds',
     ];
 
+    private const DURATION_FORMAT = '/^\d+ [\wµ+]/';
+
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public static function parse(string $duration): FiniteDuration
     {
         $trimmed = trim($duration);
@@ -41,7 +44,6 @@ final class FiniteDurationStringParser
             );
         }
 
-        /** @var class-string<TimeUnit> $unit */
         $unit = self::timeUnit()[$unit];
 
         return FiniteDuration::fromTimeUnit((int)$length, $unit::make());
@@ -52,22 +54,46 @@ final class FiniteDurationStringParser
         return array_key_exists(trim($duration), self::timeUnit());
     }
 
-    public static function timeUnit(): array
+    /**
+     * @return array<class-string<TimeUnit>, array<string>>
+     */
+    public static function timeUnits(): array
     {
         $result = [];
-        foreach (self::TIME_UNIT_LABELS as $unit => $labels) {
-            $words = self::words($labels);
-            foreach ($words as $word) {
-                $result[$word] = $unit;
+        foreach (self::TIME_UNIT_LABELS as $unit => $label) {
+            $result[$unit] = self::words($label);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return array<string, class-string<TimeUnit>>
+     */
+    private static function timeUnit(): array
+    {
+        $result = [];
+        foreach (self::timeUnits() as $unit => $labels) {
+            foreach ($labels as $label) {
+                $result[$label] = $unit;
             }
         }
 
         return $result;
     }
 
+    /**
+     * @return array<string>
+     */
     private static function words(string $input): array
     {
-        return preg_split('/\s+/', $input);
+        $result = preg_split('/\s+/', $input);
+
+        if ($result === false) {
+            throw new InvalidArgumentException('Invalid input format, required /\s+/');
+        }
+
+        return $result;
     }
 
     private static function validate(string $duration): void

@@ -18,36 +18,36 @@ final class Deadline
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public static function now(): Deadline
+    public static function now(): self
     {
-        return new Deadline(FiniteDuration::fromTimeUnit((int) hrtime(true), TimeUnit::Nanoseconds()));
+        return new self(FiniteDuration::fromTimeUnit((int) hrtime(true), TimeUnit::Nanoseconds()));
     }
 
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public static function create(FiniteDuration $time): Deadline
+    public static function create(FiniteDuration $time): self
     {
-        return new Deadline($time);
+        return new self($time);
     }
 
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public function add(FiniteDuration $other): Deadline
+    public function add(FiniteDuration $other): self
     {
-        return new Deadline($this->time->add($other));
+        return new self($this->time->add($other));
     }
 
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public function subtract(FiniteDuration $other): Deadline
+    public function subtract(FiniteDuration $other): self
     {
-        return new Deadline($this->time->subtract($other));
+        return new self($this->time->subtract($other));
     }
 
-    public function subtractDeadline(Deadline $other): FiniteDuration
+    public function subtractDeadline(self $other): FiniteDuration
     {
         return $this->time->subtract($other->time);
     }

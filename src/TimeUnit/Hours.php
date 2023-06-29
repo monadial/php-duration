@@ -14,8 +14,8 @@ final class Hours extends TimeUnit
         parent::__construct(self::HOUR_SCALE);
     }
 
-    public static function make(): Hours
+    public static function make(): self
     {
-        return new Hours();
+        return new self();
     }
 }

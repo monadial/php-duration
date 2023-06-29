@@ -14,8 +14,8 @@ final class Microseconds extends TimeUnit
         parent::__construct(self::MICRO_SCALE);
     }
 
-    public static function make(): Microseconds
+    public static function make(): self
     {
-        return new Microseconds();
+        return new self();
     }
 }
