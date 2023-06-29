@@ -20,50 +20,56 @@ class NanosecondsTest extends TestCase
 
     public function testToNanos(): void
     {
-        self::assertEquals(1, $this->nanoseconds->toNanos(TimeUnit::NANO_SCALE));
+        self::assertEquals(1, $this->nanoseconds->toNanos(1));
     }
 
     public function testToMicros(): void
     {
-        self::assertEquals(1, $this->nanoseconds->toMicros(TimeUnit::MICRO_SCALE));
+        self::assertEquals(1, $this->nanoseconds->toMicros(1000));
     }
 
     public function testToMillis(): void
     {
-        self::assertEquals(1, $this->nanoseconds->toMillis(TimeUnit::MILLI_SCALE));
+        self::assertEquals(1, $this->nanoseconds->toMillis(1000 * 1000));
     }
 
     public function testToSeconds(): void
     {
-        self::assertEquals(1, $this->nanoseconds->toSeconds(TimeUnit::SECOND_SCALE));
+        self::assertEquals(1, $this->nanoseconds->toSeconds(1000 * 1000 * 1000));
     }
 
     public function testToMinutes(): void
     {
-        self::assertEquals(1, $this->nanoseconds->toMinutes(TimeUnit::MINUTE_SCALE));
+        self::assertEquals(1, $this->nanoseconds->toMinutes(1000 * 1000 * 1000 * 60));
     }
 
     public function testToHours(): void
     {
-        self::assertEquals(1, $this->nanoseconds->toHours(TimeUnit::HOUR_SCALE));
+        self::assertEquals(1, $this->nanoseconds->toHours(1000 * 1000 * 1000 * 60 * 60));
     }
 
     public function testToDays(): void
     {
-        self::assertEquals(1, $this->nanoseconds->toDays(TimeUnit::DAY_SCALE));
+        self::assertEquals(1, $this->nanoseconds->toDays(1000 * 1000 * 1000 * 60 * 60 * 24));
     }
 
-    public function testConvert(): void
+
+    public function testConversion(): void
     {
-        self::assertEquals(TimeUnit::NANO_SCALE, $this->nanoseconds->convert(1, TimeUnit::Nanoseconds()));
-        self::assertEquals(TimeUnit::MICRO_SCALE, $this->nanoseconds->convert(1, TimeUnit::Microseconds()));
-        self::assertEquals(TimeUnit::MILLI_SCALE, $this->nanoseconds->convert(1, TimeUnit::Milliseconds()));
-        self::assertEquals(TimeUnit::SECOND_SCALE, $this->nanoseconds->convert(1, TimeUnit::Seconds()));
-        self::assertEquals(TimeUnit::MINUTE_SCALE, $this->nanoseconds->convert(1, TimeUnit::Minutes()));
-        self::assertEquals(TimeUnit::HOUR_SCALE, $this->nanoseconds->convert(1, TimeUnit::Hours()));
-        self::assertEquals(TimeUnit::DAY_SCALE, $this->nanoseconds->convert(1, TimeUnit::Days()));
+        self::assertEquals(24 * 60 * 60 * 1000 * 1000 * 1000, $this->nanoseconds->convert(1, TimeUnit::Days()));
+        self::assertEquals(60 * 60 * 1000 * 1000 * 1000, $this->nanoseconds->convert(1, TimeUnit::Hours()));
+        self::assertEquals(60 * 1000 * 1000 * 1000, $this->nanoseconds->convert(1, TimeUnit::Minutes()));
+        self::assertEquals(1000 * 1000 * 1000, $this->nanoseconds->convert(1, TimeUnit::Seconds()));
+        self::assertEquals(1000 * 1000, $this->nanoseconds->convert(1, TimeUnit::Milliseconds()));
+        self::assertEquals(1000, $this->nanoseconds->convert(1, TimeUnit::Microseconds()));
+        self::assertEquals(1, $this->nanoseconds->convert(1, TimeUnit::Nanoseconds()));
     }
 
+    public function testEquals(): void
+    {
+        self::assertTrue($this->nanoseconds->equals(TimeUnit::Nanoseconds()));
+        self::assertFalse($this->nanoseconds->equals(TimeUnit::Minutes()));
+    }
     protected function setUp(): void
     {
         $this->nanoseconds = TimeUnit::Nanoseconds();

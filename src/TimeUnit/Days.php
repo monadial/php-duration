@@ -14,8 +14,8 @@ final class Days extends TimeUnit
         parent::__construct(self::DAY_SCALE);
     }
 
-    public static function make(): Days
+    public static function make(): self
     {
-        return new static();
+        return new self();
     }
 }

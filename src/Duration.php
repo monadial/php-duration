@@ -52,37 +52,37 @@ abstract class Duration
     /**
      * Return the sum of that duration and this.
      */
-    abstract public function add(Duration $other): Duration;
+    abstract public function add(self $other): self;
 
     /**
      * Return the difference of that duration and this.
      */
-    abstract public function subtract(Duration $other): Duration;
+    abstract public function subtract(self $other): self;
 
     /**
      * Return this duration multiplied by the scalar factor.
      */
-    abstract public function multiply(int $factor): Duration;
+    abstract public function multiply(int $factor): self;
 
     /**
      * Return this duration divided by the scalar factor.
      */
-    abstract public function division(int $divisor): Duration;
+    abstract public function division(int $divisor): self;
 
     /**
      * Return the number of nanoseconds as floating point number, scaled down to the given unit.
      */
-    abstract public function toUnit(TimeUnit $unit): float;
+    abstract public function toUnit(TimeUnit $unit): FiniteDuration;
 
     /**
      * Factorise this duration.
      */
-    abstract public function factor(int $factor): Duration;
+    abstract public function factor(int $factor): self;
 
     /**
      * Negate this duration.
      */
-    abstract public function unary(): Duration;
+    abstract public function unary(): self;
 
     /**
      * Determines duration is finite
@@ -94,13 +94,13 @@ abstract class Duration
     /**
      * Returns true if this duration is equals to other duration
      */
-    abstract public function equals(Duration $other): bool;
+    abstract public function equals(self $other): bool;
 
     /**
      * Return duration which is equal to this duration but with a coarsest Unit,
      * or self in case it is already the coarsest Unit
      */
-    abstract public function toCoarsest(): Duration;
+    abstract public function toCoarsest(): self;
 
     public function __construct(int $length, TimeUnit $unit)
     {
@@ -113,9 +113,9 @@ abstract class Duration
      */
     public function timeUnitName(): string
     {
-        $timeUnitsNames = FiniteDurationStringParser::timeUnitName();
+        $timeUnitsNames = FiniteDurationStringParser::timeUnits();
 
-        return $timeUnitsNames[get_class($this->unit)] . ($this->length === 1 ? "" : "s");
+        return $timeUnitsNames[get_class($this->unit)][0] . ($this->length === 1 ? "" : "s");
     }
 
     public function __toString(): string

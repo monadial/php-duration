@@ -16,50 +16,63 @@ use PHPUnit\Framework\TestCase;
 
 class MillisecondsTest extends TestCase
 {
-    private Milliseconds $unit;
+    private Milliseconds $milliseconds;
 
-    protected function setUp(): void
+    public function testToNanos(): void
     {
-        $this->unit = TimeUnit::Milliseconds();
-    }
-
-    public function testToDays(): void
-    {
-
-    }
-
-    public function testConvert(): void
-    {
-
-    }
-
-    public function testToSeconds(): void
-    {
-
+        self::assertEquals(1000 * 1000, $this->milliseconds->toNanos(1));
     }
 
     public function testToMicros(): void
     {
-
-    }
-
-    public function testToMinutes(): void
-    {
-
-    }
-
-    public function testToHours(): void
-    {
-
+        self::assertEquals(1000, $this->milliseconds->toMicros(1));
     }
 
     public function testToMillis(): void
     {
-
+        self::assertEquals(1, $this->milliseconds->toMillis(1));
     }
 
-    public function testToNanos(): void
+    public function testToSeconds(): void
     {
+        self::assertEquals(1, $this->milliseconds->toSeconds(1000));
+    }
 
+    public function testToMinutes(): void
+    {
+        self::assertEquals(1, $this->milliseconds->toMinutes(1000 * 60));
+    }
+
+    public function testToHours(): void
+    {
+        self::assertEquals(1, $this->milliseconds->toHours(1000 * 60 * 60));
+    }
+
+    public function testToDays(): void
+    {
+        self::assertEquals(1, $this->milliseconds->toDays(1000 * 60 * 60 * 24));
+    }
+
+    public function testConversion(): void
+    {
+        self::assertEquals(24 * 60 * 60 * 1000, $this->milliseconds->convert(1, TimeUnit::Days()));
+        self::assertEquals(60 * 60 * 1000, $this->milliseconds->convert(1, TimeUnit::Hours()));
+        self::assertEquals(60 * 1000, $this->milliseconds->convert(1, TimeUnit::Minutes()));
+        self::assertEquals(1000, $this->milliseconds->convert(1, TimeUnit::Seconds()));
+        self::assertEquals(1, $this->milliseconds->convert(1, TimeUnit::Milliseconds()));
+        self::assertEquals(1, $this->milliseconds->convert(1000, TimeUnit::Microseconds()));
+        self::assertEquals(1, $this->milliseconds->convert(1000 * 1000, TimeUnit::Nanoseconds()));
+    }
+
+    public function testEquals(): void
+    {
+        self::assertTrue($this->milliseconds->equals(TimeUnit::Milliseconds()));
+        self::assertFalse($this->milliseconds->equals(TimeUnit::Minutes()));
+    }
+
+
+    protected function setUp(): void
+    {
+        $this->milliseconds = TimeUnit::Milliseconds();
     }
 }

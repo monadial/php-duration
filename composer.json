@@ -13,21 +13,20 @@
     ]
   },
   "require": {
-    "php": "^7.4|~8",
-    "lstrojny/functional-php": "dev-main"
+    "php": ">=8.1"
   },
   "require-dev": {
-    "slevomat/coding-standard": "~8.0",
-    "friendsofphp/php-cs-fixer": "v3.13.0",
+    "slevomat/coding-standard": "8.13.1",
+    "friendsofphp/php-cs-fixer": "v3.20.0",
     "php-parallel-lint/php-parallel-lint": "~v1.3",
     "nikic/php-parser": "~4.15",
     "phpmd/phpmd": "2.13.0",
-    "phpro/grumphp": "v1.14.0",
-    "phpstan/phpstan": "1.9.2",
-    "phpunit/phpunit": "9.5.26",
+    "phpro/grumphp": "v1.16.0",
+    "phpstan/phpstan": "1.10.21",
+    "phpunit/phpunit": "9.6.9",
     "roave/security-advisories": "dev-master",
-    "squizlabs/php_codesniffer": "3.7.1",
-    "vimeo/psalm": "5.1.0",
+    "squizlabs/php_codesniffer": "3.7.2",
+    "vimeo/psalm": "5.13.1",
     "sensiolabs/security-checker": "v6.0.3",
     "composer/xdebug-handler": "3.0.3"
   },
@@ -53,11 +52,5 @@
       "dealerdirect/phpcodesniffer-composer-installer": true,
       "phpro/grumphp": true
     }
-  },
-  "repositories": [
-    {
-      "type": "github",
-      "url": "https://github.com/monadial/functional-php"
-    }
-  ]
+  }
 }

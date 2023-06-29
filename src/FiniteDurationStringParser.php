@@ -14,29 +14,19 @@ use Monadial\Duration\TimeUnit\Nanoseconds;
 use Monadial\Duration\TimeUnit\Seconds;
 use Monadial\Duration\TimeUnit\TimeUnit;
 
-use function Functional\flat_map;
-use function Functional\head;
-use function Functional\last;
-use function Functional\map;
-use function Functional\tail;
-
-/**
- * Parse string representation of duration
- */
 final class FiniteDurationStringParser
 {
-    private const DURATION_FORMAT = '/^\d+ \w+/';
-
-    /** @psalm-var array<class-string<TimeUnit>, string> */
-    private const TIME_UNIT_LABELS = [
-        Days::class => 'd day',
-        Hours::class => 'h hour',
-        Minutes::class => 'min minute',
-        Seconds::class => 's sec second',
-        Milliseconds::class => 'ms millis millisecond',
-        Microseconds::class => 'µs micro microsecond',
-        Nanoseconds::class => 'ns nano nanosecond',
+    public const TIME_UNIT_LABELS = [
+        Days::class => 'day d days',
+        Hours::class => 'hour h hours',
+        Microseconds::class => 'microsecond us µs micro micros microseconds',
+        Milliseconds::class => 'millisecond ms millis milliseconds',
+        Minutes::class => 'minute min minutes',
+        Nanoseconds::class => 'nanosecond ns nano nanos nanoseconds',
+        Seconds::class => 'second s sec seconds',
     ];
+
+    private const DURATION_FORMAT = '/^\d+ [\wµ+]/';
 
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
@@ -48,39 +38,48 @@ final class FiniteDurationStringParser
 
         [$length, $unit] = explode(" ", $trimmed);
 
-        if (!array_key_exists($unit, self::timeUnit())) {
+        if (self::isValid($duration)) {
             throw new InvalidArgumentException(
-                sprintf('Unable to parse given string %s, probably invalid unit!.', $duration)
+                sprintf('Unable to parse given string `%s`, probably invalid unit!', $duration)
             );
         }
 
-        /**
-         * @var class-string<TimeUnit> $unitClass
-         * @psalm-suppress UnnecessaryVarAnnotation
-         */
-        $unitClass = self::timeUnit()[$unit];
+        $unit = self::timeUnit()[$unit];
 
-        return FiniteDuration::fromTimeUnit((int)$length, $unitClass::make());
+        return FiniteDuration::fromTimeUnit((int)$length, $unit::make());
+    }
+
+    public static function isValid(string $duration): bool
+    {
+        return array_key_exists(trim($duration), self::timeUnit());
     }
 
     /**
-     * @return array<string, string>
-     * @psalm-return array<class-string<TimeUnit>, string>
+     * @return array<class-string<TimeUnit>, array<string>>
      */
-    public static function timeUnitName(): array
+    public static function timeUnits(): array
     {
-        /** @psalm-var array<class-string<TimeUnit>, string> $timeUnitNames */
-        $timeUnitNames = map(
-            self::TIME_UNIT_LABELS,
-            static function (string $word): string {
-                /** @var string $last */
-                $last = last(self::words($word));
+        $result = [];
+        foreach (self::TIME_UNIT_LABELS as $unit => $label) {
+            $result[$unit] = self::words($label);
+        }
 
-                return $last;
+        return $result;
+    }
+
+    /**
+     * @return array<string, class-string<TimeUnit>>
+     */
+    private static function timeUnit(): array
+    {
+        $result = [];
+        foreach (self::timeUnits() as $unit => $labels) {
+            foreach ($labels as $label) {
+                $result[$label] = $unit;
             }
-        );
+        }
 
-        return $timeUnitNames;
+        return $result;
     }
 
     /**
@@ -88,45 +87,13 @@ final class FiniteDurationStringParser
      */
     private static function words(string $input): array
     {
-        /** @var array<string> $explodedWords */
-        $explodedWords = preg_split('/\s+/', $input);
+        $result = preg_split('/\s+/', $input);
 
-        return $explodedWords;
-    }
-
-    /**
-     * @param array<string> $labels
-     * @return array<string>
-     */
-    private static function expandLabels(array $labels): array
-    {
-        /** @var array<string> $result */
-        $result = array_merge(
-            [head($labels)],
-            flat_map(
-                tail($labels),
-                static fn (string $label): array => [$label, $label . 's']
-            )
-        );
+        if ($result === false) {
+            throw new InvalidArgumentException('Invalid input format, required /\s+/');
+        }
 
         return $result;
-    }
-
-    /**
-     * @psalm-return array<string, class-string<TimeUnit>>
-     */
-    private static function timeUnit(): array
-    {
-        /** @psalm-var array<array<string, class-string<TimeUnit>>> $result */
-        $result = flat_map(
-            self::TIME_UNIT_LABELS,
-            static fn (string $names, string $unit) => map(
-                self::expandLabels(self::words($names)),
-                static fn (string $name) => [$name => $unit]
-            )
-        );
-
-        return array_merge(...$result);
     }
 
     private static function validate(string $duration): void

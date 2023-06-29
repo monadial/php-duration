@@ -1,9 +1,20 @@
 version: '3.3'
 
 services:
-  duration:
-    container_name: duration
-    image: php:7.4-cli
+  duration-8.2:
+    container_name: duration-81
+    image: php:8.2-cli
     volumes:
       - .:/app:delegated
     working_dir: /app
+    stdin_open: true
+    tty: true
+
+  duration-8.1:
+    container_name: duration-81
+    image: php:8.1-cli
+    volumes:
+      - .:/app:delegated
+    working_dir: /app
+    stdin_open: true
+    tty: true
