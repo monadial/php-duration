@@ -1,6 +1,7 @@
 .idea/
 /.php_cs.cache
 /.phpcs-cache
+/.php-cs-fixer.cache
 .phpunit.result.cache
 .DS_Store
 vendor/
