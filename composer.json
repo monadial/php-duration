@@ -13,7 +13,7 @@
     ]
   },
   "require": {
-    "php": "8.*"
+    "php": "7.4|8.*"
   },
   "require-dev": {
     "slevomat/coding-standard": "~8.0",

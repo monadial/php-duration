@@ -20,7 +20,7 @@ final class Deadline
      */
     public static function now(): Deadline
     {
-        return new static(FiniteDuration::fromTimeUnit((int) hrtime(true), TimeUnit::Nanoseconds()));
+        return new Deadline(FiniteDuration::fromTimeUnit((int) hrtime(true), TimeUnit::Nanoseconds()));
     }
 
     /**
@@ -28,7 +28,7 @@ final class Deadline
      */
     public static function create(FiniteDuration $time): Deadline
     {
-        return new self($time);
+        return new Deadline($time);
     }
 
     /**
@@ -36,7 +36,7 @@ final class Deadline
      */
     public function add(FiniteDuration $other): Deadline
     {
-        return new static($this->time->add($other));
+        return new Deadline($this->time->add($other));
     }
 
     /**
@@ -44,7 +44,7 @@ final class Deadline
      */
     public function subtract(FiniteDuration $other): Deadline
     {
-        return new static($this->time->subtract($other));
+        return new Deadline($this->time->subtract($other));
     }
 
     public function subtractDeadline(Deadline $other): FiniteDuration
